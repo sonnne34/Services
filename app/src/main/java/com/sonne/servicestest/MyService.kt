@@ -1,4 +1,4 @@
-package ru.sumin.servicestest
+package com.sonne.servicestest
 
 import android.app.Service
 import android.content.Context
