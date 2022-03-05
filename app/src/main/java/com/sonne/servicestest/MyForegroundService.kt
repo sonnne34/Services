@@ -11,7 +11,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.*
 
-class MyForegroundService: Service() {
+class MyForegroundService : Service() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
@@ -49,13 +49,14 @@ class MyForegroundService: Service() {
     private fun log(message: String) {
         Log.d("SERVICE_TAG", "MyForegroundService: $message")
     }
+
     private fun createNotification() = NotificationCompat.Builder(this, CHANNEL_ID)
         .setContentTitle("Title")
         .setContentText("Text")
         .setSmallIcon(R.drawable.ic_launcher_background)
         .build()
 
-    private fun createNotificationChannel(){
+    private fun createNotificationChannel() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(

@@ -5,13 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
-class MyService: Service() {
+class MyService : Service() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
