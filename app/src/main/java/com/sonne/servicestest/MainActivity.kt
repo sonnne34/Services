@@ -3,6 +3,7 @@ package com.sonne.servicestest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.sonne.servicestest.databinding.ActivityMainBinding
+import ru.sumin.servicestest.MyService
 
 class MainActivity : AppCompatActivity() {
 
