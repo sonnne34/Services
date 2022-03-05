@@ -1,15 +1,19 @@
-package com.sonne.servicestest
+package ru.sumin.servicestest
 
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class MyService : Service() {
+class MyService: Service() {
 
-    private val coroutinesScope = CoroutineScope(Dispatchers.Main)
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreate() {
         super.onCreate()
@@ -18,22 +22,23 @@ class MyService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         log("onStartCommand")
-        coroutinesScope.launch {
-            for (i in 0 until 100) {
+        val start = intent?.getIntExtra(EXTRA_START, 0) ?: 0
+        coroutineScope.launch {
+            for (i in start until start + 100) {
                 delay(1000)
                 log("Timer $i")
             }
         }
-        return super.onStartCommand(intent, flags, startId)
+        return START_REDELIVER_INTENT
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        coroutinesScope.cancel()
+        coroutineScope.cancel()
         log("onDestroy")
     }
 
-    override fun onBind(p0: Intent?): IBinder? {
+    override fun onBind(intent: Intent?): IBinder? {
         TODO("Not yet implemented")
     }
 
@@ -43,8 +48,11 @@ class MyService : Service() {
 
     companion object {
 
-        fun newIntent(context: Context): Intent {
-            return Intent(context, MyService::class.java)
+        private const val EXTRA_START = "start"
+        fun newIntent(context: Context, start: Int): Intent {
+            return Intent(context, MyService::class.java).apply {
+                putExtra(EXTRA_START, start)
+            }
         }
     }
 }
