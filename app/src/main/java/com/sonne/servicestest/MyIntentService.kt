@@ -15,7 +15,7 @@ class MyIntentService : IntentService(NAME) {
         super.onCreate()
         log("onCreate")
 //        пересоздавать ли сервис:
-        setIntentRedelivery(true)
+        setIntentRedelivery(false)
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, createNotification())
 
