@@ -2,7 +2,9 @@ package com.sonne.servicestest
 
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
+import android.app.job.JobWorkItem
 import android.content.ComponentName
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -13,6 +15,8 @@ class MainActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
+    private var page = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +50,23 @@ class MainActivity : AppCompatActivity() {
 //            .setPersisted(true) - выполняться даже после перезагрузки устройства
 
             val jobInfo = JobInfo.Builder(MyJobService.JOB_ID, componentName)
+//                при работе с методом .schedule получаем параметры из Bundle
+//                .setExtras(MyJobService.newBundle(page++))
                 .setRequiresCharging(true)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-                .setPersisted(true)
+//                .setPersisted(true)
                 .build()
 
 //            запускаем на выполнение
             val jobScheduler = getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
-            jobScheduler.schedule(jobInfo)
+//             .schedule - сервис не будет добавлен в очередь, он отменит предыдущий сервис
+//            jobScheduler.schedule(jobInfo)
+
+//            .enqueue - сервис будет добавлен в очередь
+            val intent = MyJobService.newIntent(page++)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                jobScheduler.enqueue(jobInfo, JobWorkItem(intent))
+            }
         }
     }
 }
